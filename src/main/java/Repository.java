@@ -11,7 +11,10 @@ public class Repository {
         items = tmp;
     }
 
-    public void removeById(int id) { //3
+    public void removeById(int id) {
+        if (findById(id) == null) {
+            throw new NotFoundException("Element with id: " + id + " not found!");
+        }
         int length = items.length - 1;
         Product[] tmp = new Product[length];
         int index = 0;
@@ -24,15 +27,38 @@ public class Repository {
         items = tmp;
     }
 
-    public Product[] findAll() { //2
+    public Product findById(int id) {
+        for (Product item : items) {
+            if (item.getId() == id) {
+                return item;
+            }
+        }
+        return null;
+    }
+
+    public Product[] findAll() {
         return items;
     }
 }
 
     /*
-3. Разработайте репозиторий, позволяющий:
-сохранять Product'ы,
-получать все сохранённые Product'ы и
-удалять по id.
-Для этого репозиторий будет хранить у себя поле с типом Product[] (массив товаров).
- */
+В методе удаления removeById сначала проверяйте,
+есть ли элемент (для этого прямо из метода removeById вызывайте метод findById (про него ниже):
+Для реализации этой логики вам понадобится добавить метод findById, предназначенный для поиска товара в репозитории по его id.
+
+Так, он должен принимать параметром id искомого товара, пробегаться по всем товарам репозитория и сверять их id с искомом, в случае совпадения делать return этого товара.
+Если же пробежав все товары репозитория ни один подходящий найден не был (т.е. цикл закончился без вызова return внутри него), то следует сделать return null.
+
+Общая схема этого метода будет такой:
+
+public Product findById(???) {
+  for (???) {
+    if (???) {
+      return product;
+    }
+  }
+  return null;
+}
+
+если результат - null, тогда выкидывайте исключение NotFoundException)
+*/
